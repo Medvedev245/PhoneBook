@@ -12,11 +12,6 @@ export const StyledForm = styled(Form)`
     width: 100%;
   }
 
-  svg {
-    width: 28px;
-    height: 28px;
-  }
-
   @media screen and (min-width: ${props => props.theme.media.m}) {
     div > div {
       width: 300px;
@@ -46,26 +41,34 @@ export const InputWrapper = styled.div`
 `;
 
 export const Button = styled.button`
-  padding: 12px;
-  align-self: flex-start;
-  margin-left: 55px;
-  margin-top: 15px;
-  min-width: 105px;
-  background-color: rgb(102, 102, 102);
-  color: #fff;
-  border-radius: 4px;
+  display: block;
+  padding: 8px;
+  min-width: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
   border: none;
-  outline: none;
+  background: transparent;
+  color: ${props => props.theme.colors.addContact.icon};
   cursor: pointer;
-  transition: box-shadow 250ms ease-in-out, opacity 250ms ease-in-out;
 
-  &:hover {
-    box-shadow: -1px 0px 8px -2px ${props => props.theme.colors.btns.shadow};
-    opacity: 0.9;
+  svg {
+    transition: transform 250ms ease-in-out, color 250ms ease-in-out;
+    width: 40px;
+    height: 40px;
+    &:hover {
+      color: ${props => props.theme.colors.addContact.hover};
+
+      transform: scale(1.08);
+    }
+
+    &:active {
+      color: ${props => props.theme.colors.addContact.hover};
+      transform: scale(1.08);
+    }
   }
 
-  &:active {
-    box-shadow: -1px 0px 8px -2px ${props => props.theme.colors.btns.shadow};
-    opacity: 0.9;
+  @media screen and (min-width: ${props => props.theme.media.m}) {
+    margin-left: 160px;
   }
 `;

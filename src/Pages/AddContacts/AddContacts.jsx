@@ -1,6 +1,6 @@
-import { ContactsForm } from 'components/ContactForm/ContactForm';
+import { ContactsForm } from 'components/ContactsForm/ContactsForm';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Wrapper, AvatarWrapper, BackBtn } from './AddContacts.styled';
+import { Wrapper, AvatarWrapper, BackBtn } from './AddContacts.style';
 import { TbArrowBackUp } from 'react-icons/tb';
 
 const AddContacts = () => {

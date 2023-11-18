@@ -1,61 +1,62 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { selectCurrentContact } from 'redux/contacts/selectors';
+import { ErrorMessage, Field, Formik } from 'formik';
+import { FiUserPlus } from 'react-icons/fi';
+import * as Yup from 'yup';
 import {
   StyledForm,
   Wrapper,
   Button,
   InputWrapper,
-} from './ContactEdit.styled';
-import { ErrorMessage, Field, Formik } from 'formik';
-import { ThemeProvider } from '@mui/material/styles';
-import * as Yup from 'yup';
+} from './ContactsForm.styled';
 import { PatternFormat } from 'react-number-format';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewContact } from 'redux/contacts/thunk';
+import { selectContacts } from 'redux/contacts/selectors';
 import { TextField, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PhoneEnabledIcon from '@mui/icons-material/PhoneEnabled';
 import toast from 'react-hot-toast';
-import { editContact } from 'redux/contacts/thunk';
+import { useNavigate } from 'react-router-dom';
+import { selectTheme } from 'redux/userTheme/slice';
 import { grey } from '@mui/material/colors';
 import { useMemo } from 'react';
-import { selectTheme } from 'redux/userTheme/slice';
 
+// ====== Validation ========= //
 const ContactsSchema = Yup.object().shape({
   name: Yup.string().required('* Name is required'),
   number: Yup.string().required('* Phone number is required'),
 });
 
-const ContactEdit = () => {
-  const { id } = useParams();
-  const userTheme = useSelector(selectTheme);
-  const currentContact = useSelector(state =>
-    selectCurrentContact(state, { id })
-  );
+const initialValues = { name: '', number: '' };
 
+export const ContactsForm = () => {
+  const allcontacts = useSelector(selectContacts);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userTheme = useSelector(selectTheme);
 
-  const initialValues = {
-    name: currentContact ? currentContact.name : '',
-    number: currentContact ? currentContact.number : '',
-  };
+  const handleSubmit = (values, { resetForm }) => {
+    if (allcontacts.find(contact => contact.name === values.name)) {
+      return alert(`${values.name} is already in contacts`);
+    }
 
-  const handleSubmit = values => {
-    const updatedContact = { name: values.name, number: values.number, id };
+    if (allcontacts.find(contact => contact.number === values.number)) {
+      return alert(`${values.number} is already in contacts`);
+    }
 
-    dispatch(editContact(updatedContact));
+    dispatch(addNewContact({ ...values }));
+    navigate('/');
 
     toast.success(
       <div>
-        Contact <b>{values.name}</b> updated!
+        <b>{values.name}</b> added in phonebook
       </div>,
       {
         duration: 4000,
         icon: '✅',
       }
     );
-    navigate(-1);
+    resetForm();
   };
 
   // MUI Theme
@@ -141,12 +142,12 @@ const ContactEdit = () => {
               style={{ color: 'red' }}
             />
 
-            <Button type="submit">Edit</Button>
+            <Button type="submit">
+              <FiUserPlus size={26} />
+            </Button>
           </ThemeProvider>
         </StyledForm>
       </Formik>
     </Wrapper>
   );
 };
-
-export default ContactEdit;

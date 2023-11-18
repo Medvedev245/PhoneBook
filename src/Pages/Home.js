@@ -1,4 +1,4 @@
-import { ContactList } from 'components/ContactList/ContactList.jsx';
+import { ContactList } from 'components/ContactsList/ContactsList';
 import { useLocation } from 'react-router-dom';
 
 const Home = () => {
